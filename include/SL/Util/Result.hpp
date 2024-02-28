@@ -49,6 +49,11 @@ namespace SL::Util
 
         operator bool() const;
 
+        constexpr T*       operator->()       { return &*_val; }
+        constexpr const T* operator->() const { return &*_val; }
+        constexpr T&       operator*()        { return *_val; }
+        constexpr const T& operator*()  const { return *_val; }
+
     private:
         std::optional<T> _val;
         std::optional<E> _err;
