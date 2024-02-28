@@ -8,14 +8,14 @@ find_package(Lua REQUIRED)
 
 ## LUA
 set(LUA_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/Lua/TypeMap.cpp
-    ${CMAKE_SOURCE_DIR}/src/Lua/Lib.cpp
-    ${CMAKE_SOURCE_DIR}/src/Lua/Runtime.cpp
-    ${CMAKE_SOURCE_DIR}/src/Lua/Table.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Lua/TypeMap.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Lua/Lib.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Lua/Runtime.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Lua/Table.cpp)
 
 add_library(simple-lua SHARED ${LUA_SOURCES})
 
 target_link_libraries(simple-lua PRIVATE ${LUA_LIBRARIES})
 target_include_directories(simple-lua PRIVATE
-    ${CMAKE_SOURCE_DIR}/include 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include 
     ${LUA_INCLUDE_DIR})
