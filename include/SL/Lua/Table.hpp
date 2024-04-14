@@ -4,6 +4,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <functional>
 
 namespace SL
 {

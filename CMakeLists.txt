@@ -16,6 +16,9 @@ set(LUA_SOURCES
 add_library(simple-lua SHARED ${LUA_SOURCES})
 
 target_link_libraries(simple-lua PRIVATE ${LUA_LIBRARIES})
-target_include_directories(simple-lua PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include 
-    ${LUA_INCLUDE_DIR})
+target_include_directories(simple-lua 
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include 
+    PRIVATE
+        ${LUA_INCLUDE_DIR}
+)
