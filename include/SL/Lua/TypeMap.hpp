@@ -17,7 +17,7 @@ namespace CompileTime
     template<typename T>
     struct TypeMap
     {
-        inline static int LuaType = 0;
+        static int LuaType;
 
         static bool
         check(State L);

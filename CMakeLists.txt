@@ -4,7 +4,7 @@ project(main)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(Lua REQUIRED)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/extern/lua)
 
 ## LUA
 set(LUA_SOURCES
@@ -15,7 +15,7 @@ set(LUA_SOURCES
 
 add_library(simple-lua SHARED ${LUA_SOURCES})
 
-target_link_libraries(simple-lua PRIVATE ${LUA_LIBRARIES})
+target_link_libraries(simple-lua PRIVATE lua_static)
 target_include_directories(simple-lua 
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include 

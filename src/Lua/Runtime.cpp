@@ -23,7 +23,7 @@ namespace SL
 Runtime::Runtime(const std::string& filename) :
     L(luaL_newstate()),
     _good(lua_check(STATE, luaL_dofile(STATE, filename.c_str()))),
-    _filename(std::filesystem::path(filename).filename().c_str()),
+    _filename(std::filesystem::path(filename).filename().string()),
     _last_modified(std::filesystem::last_write_time(std::filesystem::path(filename)))
 {
     if (good()) luaL_openlibs(STATE);
@@ -116,7 +116,7 @@ Runtime::operator bool() const
 
 void Runtime::_pop(std::size_t n) const
 {
-    lua_pop(STATE, n);
+    lua_pop(STATE, static_cast<int>(n));
 }
 
 int Runtime::_call_func(uint32_t args, uint32_t ret) const

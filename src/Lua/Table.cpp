@@ -15,8 +15,8 @@ Table::Data
 Table::Data::fromValue(const T& value)
 {
     return Data {
-        .data = emplace(value),
-        .type = CompileTime::TypeMap<T>::LuaType
+        emplace(value),
+        CompileTime::TypeMap<T>::LuaType
     };    
 }
 template Table::Data Table::Data::fromValue(const SL::Number&);
@@ -252,7 +252,7 @@ Table::fromStack(State L)
         case LUA_TTABLE:    value = Data::emplace(Table(STATE));                                      break;
         }
         
-        dictionary.insert(std::pair(key, Data{ .data = value, .type = type }));
+        dictionary.insert(std::pair(key, Data{ value, type }));
         if (count == lua_gettop(STATE)) lua_pop(STATE, 1);
     }
     lua_pop(STATE, 1);
