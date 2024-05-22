@@ -13,7 +13,7 @@ namespace SL
     /**
      * @brief Represents a single Lua runtime.
      */
-    struct Runtime
+    struct SL_SYMBOL Runtime
     {
         enum class ErrorCode
         {

@@ -15,7 +15,7 @@ namespace SL::Lib
     /**
      * @brief Represents a base library package in a Lua script
      */
-    struct Base
+    struct SL_SYMBOL Base
     {
         Base(const Base&) = delete;
         Base(Base&&) = delete;

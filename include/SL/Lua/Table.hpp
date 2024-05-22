@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Def.hpp"
 #include "Lua.hpp"
 
 #include <optional>
@@ -9,7 +10,7 @@
 
 namespace SL
 {
-    struct Table
+    struct SL_SYMBOL Table
     {
         /**
          * @brief Represents a value in the table stored in memory with a type.

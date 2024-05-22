@@ -15,7 +15,7 @@ namespace SL
 namespace CompileTime
 {
     template<typename T>
-    struct TypeMap
+    struct SL_SYMBOL TypeMap
     {
         static int LuaType;
 

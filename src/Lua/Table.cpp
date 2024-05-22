@@ -19,12 +19,12 @@ Table::Data::fromValue(const T& value)
         CompileTime::TypeMap<T>::LuaType
     };    
 }
-template Table::Data Table::Data::fromValue(const SL::Number&);
-template Table::Data Table::Data::fromValue(const SL::String&);
-template Table::Data Table::Data::fromValue(const SL::Boolean&);
-template Table::Data Table::Data::fromValue(const SL::Function&);
-template Table::Data Table::Data::fromValue(const SL::Table&);
-template Table::Data Table::Data::fromValue(void* const&);
+template SL_SYMBOL Table::Data Table::Data::fromValue(const SL::Number&);
+template SL_SYMBOL Table::Data Table::Data::fromValue(const SL::String&);
+template SL_SYMBOL Table::Data Table::Data::fromValue(const SL::Boolean&);
+template SL_SYMBOL Table::Data Table::Data::fromValue(const SL::Function&);
+template SL_SYMBOL Table::Data Table::Data::fromValue(const SL::Table&);
+template SL_SYMBOL Table::Data Table::Data::fromValue(void* const&);
 
 template<typename T>
 std::shared_ptr<void>
@@ -37,11 +37,11 @@ Table::Data::emplace(const T& value)
     *static_cast<T*>(ptr.get()) = value;
     return ptr;
 }
-template std::shared_ptr<void> Table::Data::emplace(const SL::Number&);
-template std::shared_ptr<void> Table::Data::emplace(const SL::String&);
-template std::shared_ptr<void> Table::Data::emplace(const SL::Boolean&);
-template std::shared_ptr<void> Table::Data::emplace(const SL::Function&);
-template std::shared_ptr<void> Table::Data::emplace(const SL::Table&);
+template SL_SYMBOL std::shared_ptr<void> Table::Data::emplace(const SL::Number&);
+template SL_SYMBOL std::shared_ptr<void> Table::Data::emplace(const SL::String&);
+template SL_SYMBOL std::shared_ptr<void> Table::Data::emplace(const SL::Boolean&);
+template SL_SYMBOL std::shared_ptr<void> Table::Data::emplace(const SL::Function&);
+template SL_SYMBOL std::shared_ptr<void> Table::Data::emplace(const SL::Table&);
 
 /* Table */
 
@@ -72,12 +72,12 @@ Table::each(std::function<void(uint32_t, T&)> lambda)
         lambda(i++, val);
     }
 }
-template void Table::each(std::function<void(uint32_t, SL::Number&)>);
-template void Table::each(std::function<void(uint32_t, SL::String&)>);
-template void Table::each(std::function<void(uint32_t, SL::Boolean&)>);
-template void Table::each(std::function<void(uint32_t, SL::Function&)>);
-template void Table::each(std::function<void(uint32_t, SL::Table&)>);
-template void Table::each(std::function<void(uint32_t, void*&)>);
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, SL::Number&)>);
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, SL::String&)>);
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, SL::Boolean&)>);
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, SL::Function&)>);
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, SL::Table&)>);
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, void*&)>);
 
 template<typename T>
 void 
@@ -90,12 +90,12 @@ Table::each(std::function<void(uint32_t, const T&)> lambda) const
         lambda(i++, val);
     }
 }
-template void Table::each(std::function<void(uint32_t, const SL::Number&)>) const;
-template void Table::each(std::function<void(uint32_t, const SL::String&)>) const;
-template void Table::each(std::function<void(uint32_t, const SL::Boolean&)>) const;
-template void Table::each(std::function<void(uint32_t, const SL::Function&)>) const;
-template void Table::each(std::function<void(uint32_t, const SL::Table&)>) const;
-template void Table::each(std::function<void(uint32_t, void* const&)>) const;
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, const SL::Number&)>) const;
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, const SL::String&)>) const;
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, const SL::Boolean&)>) const;
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, const SL::Function&)>) const;
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, const SL::Table&)>) const;
+template SL_SYMBOL void Table::each(std::function<void(uint32_t, void* const&)>) const;
 
 template<typename T>
 void Table::try_get(const std::string& name, std::function<void(T&)> lambda, std::optional<std::function<void()>> if_not)
@@ -103,12 +103,12 @@ void Table::try_get(const std::string& name, std::function<void(T&)> lambda, std
     if (hasValue(name)) lambda(get<T>(name));
     else { if (if_not.has_value()) if_not.value()(); }
 }
-template void Table::try_get(const std::string&, std::function<void(SL::Number&)>, std::optional<std::function<void()>>);
-template void Table::try_get(const std::string&, std::function<void(SL::String&)>, std::optional<std::function<void()>>);
-template void Table::try_get(const std::string&, std::function<void(SL::Boolean&)>, std::optional<std::function<void()>>);
-template void Table::try_get(const std::string&, std::function<void(SL::Function&)>, std::optional<std::function<void()>>);
-template void Table::try_get(const std::string&, std::function<void(SL::Table&)>, std::optional<std::function<void()>>);
-template void Table::try_get(const std::string&, std::function<void(void*&)>, std::optional<std::function<void()>>);
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(SL::Number&)>, std::optional<std::function<void()>>);
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(SL::String&)>, std::optional<std::function<void()>>);
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(SL::Boolean&)>, std::optional<std::function<void()>>);
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(SL::Function&)>, std::optional<std::function<void()>>);
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(SL::Table&)>, std::optional<std::function<void()>>);
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(void*&)>, std::optional<std::function<void()>>);
 
 template<typename T>
 void Table::try_get(const std::string& name, std::function<void(const T&)> lambda, std::optional<std::function<void()>> if_not) const
@@ -116,12 +116,12 @@ void Table::try_get(const std::string& name, std::function<void(const T&)> lambd
     if (hasValue(name)) lambda(get<T>(name));
     else { if (if_not.has_value()) if_not.value()(); }
 }
-template void Table::try_get(const std::string&, std::function<void(const SL::Number&)>, std::optional<std::function<void()>>) const;
-template void Table::try_get(const std::string&, std::function<void(const SL::String&)>, std::optional<std::function<void()>>) const;
-template void Table::try_get(const std::string&, std::function<void(const SL::Boolean&)>, std::optional<std::function<void()>>) const;
-template void Table::try_get(const std::string&, std::function<void(const SL::Function&)>, std::optional<std::function<void()>>) const;
-template void Table::try_get(const std::string&, std::function<void(const SL::Table&)>, std::optional<std::function<void()>>) const;
-template void Table::try_get(const std::string&, std::function<void(void* const&)>, std::optional<std::function<void()>>) const;
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(const SL::Number&)>, std::optional<std::function<void()>>) const;
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(const SL::String&)>, std::optional<std::function<void()>>) const;
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(const SL::Boolean&)>, std::optional<std::function<void()>>) const;
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(const SL::Function&)>, std::optional<std::function<void()>>) const;
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(const SL::Table&)>, std::optional<std::function<void()>>) const;
+template SL_SYMBOL void Table::try_get(const std::string&, std::function<void(void* const&)>, std::optional<std::function<void()>>) const;
 
 void
 Table::fromTable(const Table& table)
@@ -153,12 +153,12 @@ T& Table::get(const std::string& name)
     SL_ASSERT(dictionary.count(name), "Dictionary doesn't have key");
     return *static_cast<T*>(dictionary.at(name).data.get());
 }
-template SL::Number&   Table::get(const std::string&);
-template SL::String&   Table::get(const std::string&);
-template SL::Boolean&  Table::get(const std::string&);
-template SL::Function& Table::get(const std::string&);
-template SL::Table&    Table::get(const std::string&);
-template void**&        Table::get(const std::string&);
+template SL_SYMBOL SL::Number&   Table::get(const std::string&);
+template SL_SYMBOL SL::String&   Table::get(const std::string&);
+template SL_SYMBOL SL::Boolean&  Table::get(const std::string&);
+template SL_SYMBOL SL::Function& Table::get(const std::string&);
+template SL_SYMBOL SL::Table&    Table::get(const std::string&);
+template SL_SYMBOL void**&        Table::get(const std::string&);
 
 template<typename T>
 const T& Table::get(const std::string& name) const
@@ -166,23 +166,23 @@ const T& Table::get(const std::string& name) const
     SL_ASSERT(dictionary.count(name), "Dictionary doesn't have key");
     return *static_cast<T*>(dictionary.at(name).data.get());
 }
-template const SL::Number&   Table::get(const std::string&) const;
-template const SL::String&   Table::get(const std::string&) const;
-template const SL::Boolean&  Table::get(const std::string&) const;
-template const SL::Function& Table::get(const std::string&) const;
-template const SL::Table&    Table::get(const std::string&) const;
-template void** const&        Table::get(const std::string&) const;
+template SL_SYMBOL const SL::Number&   Table::get(const std::string&) const;
+template SL_SYMBOL const SL::String&   Table::get(const std::string&) const;
+template SL_SYMBOL const SL::Boolean&  Table::get(const std::string&) const;
+template SL_SYMBOL const SL::Function& Table::get(const std::string&) const;
+template SL_SYMBOL const SL::Table&    Table::get(const std::string&) const;
+template SL_SYMBOL void** const&        Table::get(const std::string&) const;
 
 template<typename T>
 void Table::set(const std::string& name, const T& value)
 {
     dictionary.insert(std::pair(name, Table::Data::fromValue(value)));
 }
-template void Table::set(const std::string&, const SL::Number&);
-template void Table::set(const std::string&, const SL::String&);
-template void Table::set(const std::string&, const SL::Boolean&);
-template void Table::set(const std::string&, const SL::Function&);
-template void Table::set(const std::string&, const SL::Table&);
+template SL_SYMBOL void Table::set(const std::string&, const SL::Number&);
+template SL_SYMBOL void Table::set(const std::string&, const SL::String&);
+template SL_SYMBOL void Table::set(const std::string&, const SL::Boolean&);
+template SL_SYMBOL void Table::set(const std::string&, const SL::Function&);
+template SL_SYMBOL void Table::set(const std::string&, const SL::Table&);
 
 void Table::set(const std::string& name, void* value)
 {

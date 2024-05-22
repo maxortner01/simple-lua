@@ -15,6 +15,7 @@ set(LUA_SOURCES
 
 add_library(simple-lua SHARED ${LUA_SOURCES})
 
+target_compile_definitions(simple-lua PRIVATE SL_BUILD)
 target_link_libraries(simple-lua PRIVATE lua_static)
 target_include_directories(simple-lua 
     PUBLIC

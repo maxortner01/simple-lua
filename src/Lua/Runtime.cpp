@@ -77,10 +77,10 @@ Runtime::getGlobal(const std::string& name)
     
     return { CompileTime::TypeMap<T>::construct(L) };
 }
-template Runtime::Result<Number>   Runtime::getGlobal(const std::string&);
-template Runtime::Result<String>   Runtime::getGlobal(const std::string&);
-template Runtime::Result<Boolean>  Runtime::getGlobal(const std::string&);
-template Runtime::Result<Table>    Runtime::getGlobal(const std::string&);
+template SL_SYMBOL Runtime::Result<Number>   Runtime::getGlobal(const std::string&);
+template SL_SYMBOL Runtime::Result<String>   Runtime::getGlobal(const std::string&);
+template SL_SYMBOL Runtime::Result<Boolean>  Runtime::getGlobal(const std::string&);
+template SL_SYMBOL Runtime::Result<Table>    Runtime::getGlobal(const std::string&);
 
 template<>
 Runtime::Result<SL::Function>
@@ -102,11 +102,11 @@ Runtime::setGlobal(const std::string& name, const T& value)
     lua_setglobal(STATE, name.c_str());
     return { };
 }
-template Runtime::Result<void> Runtime::setGlobal(const std::string&, const SL::Number&);
-template Runtime::Result<void> Runtime::setGlobal(const std::string&, const SL::String&);
-template Runtime::Result<void> Runtime::setGlobal(const std::string&, const SL::Boolean&);
-template Runtime::Result<void> Runtime::setGlobal(const std::string&, const SL::Table&);
-template Runtime::Result<void> Runtime::setGlobal(const std::string&, const SL::Function&);
+template SL_SYMBOL Runtime::Result<void> Runtime::setGlobal(const std::string&, const SL::Number&);
+template SL_SYMBOL Runtime::Result<void> Runtime::setGlobal(const std::string&, const SL::String&);
+template SL_SYMBOL Runtime::Result<void> Runtime::setGlobal(const std::string&, const SL::Boolean&);
+template SL_SYMBOL Runtime::Result<void> Runtime::setGlobal(const std::string&, const SL::Table&);
+template SL_SYMBOL Runtime::Result<void> Runtime::setGlobal(const std::string&, const SL::Function&);
 
 bool Runtime::good() const
 { return _good; }
