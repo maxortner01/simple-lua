@@ -112,28 +112,28 @@ namespace SL::Util
     template<typename T, typename E>
     T& Result<T, E>::value()
     {
-        S2D_ASSERT(good(), "Result not good!");
+        SL_ASSERT(good(), "Result not good!");
         return _val.value();
     }
 
     template<typename T, typename E>
     const T& Result<T, E>::value() const
     {
-        S2D_ASSERT(good(), "Result not good!");
+        SL_ASSERT(good(), "Result not good!");
         return _val.value();
     }
 
     template<typename T, typename E>
     const E& Result<T, E>::error() const
     {
-        S2D_ASSERT(_err.has_value(), "Result is good!");
+        SL_ASSERT(_err.has_value(), "Result is good!");
         return _err.value();
     }
 
     template<typename E>
     const E& Result<void, E>::error() const
     {
-        S2D_ASSERT(_err.has_value(), "Result is good!");
+        SL_ASSERT(_err.has_value(), "Result is good!");
         return _err.value();
     }
 
