@@ -13,7 +13,7 @@ namespace SL
     /**
      * @brief Represents a single Lua runtime.
      */
-    struct SL_SYMBOL Runtime
+    struct Runtime
     {
         enum class ErrorCode
         {
@@ -31,12 +31,12 @@ namespace SL
          * @brief Construct a Lua runtime from a script
          * @param filename File path to the script
          */
-        Runtime(const std::string& filename);
+        SL_SYMBOL Runtime(const std::string& filename);
         
-        Runtime(Runtime&& r);
+        SL_SYMBOL Runtime(Runtime&& r);
         Runtime(const Runtime&) = delete;
 
-        ~Runtime();
+        SL_SYMBOL ~Runtime();
 
         /**
          * @brief Creates a runtime with the given Libraries loaded into it.
@@ -54,7 +54,7 @@ namespace SL
          * @param function Pointer to a static function 
          * @return Result<void> Returns if an error has occured
          */
-        Result<void>
+        SL_SYMBOL Result<void>
         registerFunction(
             const std::string& table_name,
             const std::string& func_name,
@@ -67,7 +67,7 @@ namespace SL
          * @return Result<T> The value of the variable or error
          */
         template<typename T>
-        Result<T>
+        SL_SYMBOL Result<T>
         getGlobal(const std::string& name);
 
         // TODO: Need to load globals in datastructure so that the file can be hot-reloaded
@@ -82,7 +82,7 @@ namespace SL
          * @return Result<void> The status of the operation
          */
         template<typename T>
-        Result<void>
+        SL_SYMBOL Result<void>
         setGlobal(const std::string& name, const T& value);
 
         /**
@@ -94,20 +94,20 @@ namespace SL
          * @return Result<std::tuple<Return...>> Contains the values returned from the function or error
          */
         template<typename... Return, typename... Args>
-        Result<std::tuple<Return...>>
+        inline Result<std::tuple<Return...>> 
         runFunction(
             const std::string& name,
             Args&&... args);
 
-        bool     good() const;
-        operator bool() const;
+        SL_SYMBOL bool     good() const;
+        SL_SYMBOL operator bool() const;
 
 
         const auto& filename() const { return _filename; }
 
     private:
-        void _pop(std::size_t n = 1) const;
-        int _call_func(uint32_t args, uint32_t ret) const;
+        SL_SYMBOL void _pop(std::size_t n = 1) const;
+        SL_SYMBOL int _call_func(uint32_t args, uint32_t ret) const;
 
         State L;
         bool _good;

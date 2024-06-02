@@ -77,13 +77,13 @@ Runtime::getGlobal(const std::string& name)
     
     return { CompileTime::TypeMap<T>::construct(L) };
 }
-template SL_SYMBOL Runtime::Result<Number>   Runtime::getGlobal(const std::string&);
-template SL_SYMBOL Runtime::Result<String>   Runtime::getGlobal(const std::string&);
-template SL_SYMBOL Runtime::Result<Boolean>  Runtime::getGlobal(const std::string&);
-template SL_SYMBOL Runtime::Result<Table>    Runtime::getGlobal(const std::string&);
+template SL_SYMBOL Runtime::Result<Number>       Runtime::getGlobal(const std::string&);
+template SL_SYMBOL Runtime::Result<String>       Runtime::getGlobal(const std::string&);
+template SL_SYMBOL Runtime::Result<Boolean>      Runtime::getGlobal(const std::string&);
+template SL_SYMBOL Runtime::Result<Table>        Runtime::getGlobal(const std::string&);
 
 template<>
-Runtime::Result<SL::Function>
+SL_SYMBOL Runtime::Result<SL::Function>
 Runtime::getGlobal<SL::Function>(const std::string& name)
 {
     lua_getglobal(STATE, name.c_str());

@@ -15,7 +15,7 @@ namespace SL::Lib
     /**
      * @brief Represents a base library package in a Lua script
      */
-    struct SL_SYMBOL Base
+    struct Base
     {
         Base(const Base&) = delete;
         Base(Base&&) = delete;
@@ -36,16 +36,16 @@ namespace SL::Lib
          * @brief Registers the functions in this library with the given runtime.
          * @param runtime Lua runtime to register the functions with
          */
-        void registerFunctions(SL::Runtime& runtime) const;
+        SL_SYMBOL void registerFunctions(SL::Runtime& runtime) const;
 
-        SL::Table asTable() const;
+        SL_SYMBOL SL::Table asTable() const;
 
     protected:
         Base(
             const std::string& name,
             const Map& funcs);
         
-        ~Base() = default;
+        virtual ~Base() = default;
 
         std::string _name;
         Map         _funcs;

@@ -57,7 +57,7 @@ Table::Table(State L)
 const Table::Data& 
 Table::getRaw(const std::string& name) const
 {
-    SL_ASSERT_ARGS(dictionary.count(name), "Error requesting raw data \"%s\"", name.c_str());
+    SL_ASSERT(dictionary.count(name), "Error requesting raw data \"" << name << "\"");
     return dictionary.at(name);
 }
 
@@ -159,6 +159,23 @@ template SL_SYMBOL SL::Boolean&  Table::get(const std::string&);
 template SL_SYMBOL SL::Function& Table::get(const std::string&);
 template SL_SYMBOL SL::Table&    Table::get(const std::string&);
 template SL_SYMBOL void**&        Table::get(const std::string&);
+
+template<typename T>
+std::vector<T> Table::get() const
+{
+    std::vector<T> r;
+
+    each<T>([&r](uint32_t, const T& v)
+    { r.push_back(v); });
+
+    return r;
+}
+template SL_SYMBOL std::vector<SL::Number>    Table::get<SL::Number>() const;
+template SL_SYMBOL std::vector<SL::String>    Table::get<SL::String>() const;
+template SL_SYMBOL std::vector<SL::Boolean>   Table::get<SL::Boolean>() const;
+template SL_SYMBOL std::vector<SL::Function>  Table::get<SL::Function>() const;
+template SL_SYMBOL std::vector<SL::Table>     Table::get<SL::Table>() const;
+template SL_SYMBOL std::vector<void**>        Table::get<void**>() const;
 
 template<typename T>
 const T& Table::get(const std::string& name) const

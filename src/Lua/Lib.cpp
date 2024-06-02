@@ -43,7 +43,7 @@ namespace detail
 
     void __pop(State L, uint32_t n)
     {
-        lua_pop(STATE, n);
+        lua_pop(STATE, static_cast<int32_t>(n));
     }
 }
 
