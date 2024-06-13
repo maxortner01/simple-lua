@@ -4,6 +4,7 @@
 
 #include "Lua.cpp"
 
+#include <vector>
 #include <sstream>
 
 namespace SL
