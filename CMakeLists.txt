@@ -5,6 +5,7 @@ project(main)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(LUA_ENABLE_TESTING OFF CACHE BOOL "disable testing in lua")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/extern/lua)
 
 ## LUA
@@ -15,15 +16,6 @@ set(LUA_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Lua/Table.cpp)
 
 add_library(simple-lua SHARED ${LUA_SOURCES})
-
-target_compile_definitions(simple-lua PRIVATE SL_BUILD)
-target_link_libraries(simple-lua PRIVATE lua_static)
-target_include_directories(simple-lua 
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include 
-    PRIVATE
-        ${LUA_INCLUDE_DIR}
-)
 
 option(SL_UNIT_TESTS "Build the unit tests" OFF)
 if (SL_UNIT_TESTS)
@@ -45,3 +37,12 @@ if (SL_UNIT_TESTS)
     include(GoogleTest)
     gtest_discover_tests(hello_test)
 endif()
+
+target_compile_definitions(simple-lua PRIVATE SL_BUILD)
+target_link_libraries(simple-lua PRIVATE lua_static)
+target_include_directories(simple-lua 
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include 
+    PRIVATE
+        ${LUA_INCLUDE_DIR}
+)
