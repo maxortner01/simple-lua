@@ -20,6 +20,15 @@ bool lua_check(lua_State* L, int r, std::optional<int> line = std::nullopt)
 namespace SL
 {
 
+namespace CompileTime
+{
+extern template int TypeMap<SL::Number>::LuaType;
+extern template int TypeMap<SL::String>::LuaType;
+extern template int TypeMap<SL::Function>::LuaType;
+extern template int TypeMap<SL::Boolean>::LuaType;
+extern template int TypeMap<SL::Table>::LuaType;
+}
+
 Runtime::Runtime(const std::string& filename) :
     L(luaL_newstate()),
     _good(lua_check(STATE, luaL_dofile(STATE, filename.c_str()))),

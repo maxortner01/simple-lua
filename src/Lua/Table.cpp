@@ -9,6 +9,15 @@
 namespace SL
 {
 
+namespace CompileTime
+{
+extern template int TypeMap<SL::Number>::LuaType;
+extern template int TypeMap<SL::String>::LuaType;
+extern template int TypeMap<SL::Function>::LuaType;
+extern template int TypeMap<SL::Boolean>::LuaType;
+extern template int TypeMap<SL::Table>::LuaType;
+}
+
 /* Table::Data */
 template<typename T>
 Table::Data 
