@@ -41,7 +41,7 @@ namespace SL::Lib
         SL_SYMBOL SL::Table asTable() const;
 
     protected:
-        Base(
+        SL_SYMBOL Base(
             const std::string& name,
             const Map& funcs);
         
@@ -54,9 +54,9 @@ namespace SL::Lib
     namespace detail
     {
     
-    std::size_t __getTop(State L);
-    bool        __isNil(State L);
-    void        __pop(State L, uint32_t n);
+    SL_SYMBOL std::size_t __getTop(State L);
+    SL_SYMBOL bool        __isNil(State L);
+    SL_SYMBOL void        __pop(State L, uint32_t n);
 
     }
 
