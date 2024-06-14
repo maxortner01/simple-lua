@@ -17,6 +17,15 @@ set(LUA_SOURCES
 
 add_library(simple-lua SHARED ${LUA_SOURCES})
 
+target_compile_definitions(simple-lua PRIVATE SL_BUILD)
+target_link_libraries(simple-lua PRIVATE lua_static)
+target_include_directories(simple-lua 
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include 
+    PRIVATE
+        ${LUA_INCLUDE_DIR}
+)
+
 option(SL_UNIT_TESTS "Build the unit tests" OFF)
 if (SL_UNIT_TESTS)
     include(FetchContent)
@@ -34,15 +43,11 @@ if (SL_UNIT_TESTS)
     add_executable(hello_test ${CMAKE_CURRENT_SOURCE_DIR}/tests/hello_test.cpp)
     target_link_libraries(hello_test PRIVATE simple-lua GTest::gtest_main)
 
+    add_executable(lua_file ${CMAKE_CURRENT_SOURCE_DIR}/tests/lua_file.cpp)
+    target_link_libraries(lua_file PRIVATE simple-lua GTest::gtest_main)
+    target_compile_definitions(lua_file PRIVATE LUA_FILE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/lua-files")
+
     include(GoogleTest)
     gtest_discover_tests(hello_test)
+    gtest_discover_tests(lua_file)
 endif()
-
-target_compile_definitions(simple-lua PRIVATE SL_BUILD)
-target_link_libraries(simple-lua PRIVATE lua_static)
-target_include_directories(simple-lua 
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include 
-    PRIVATE
-        ${LUA_INCLUDE_DIR}
-)
