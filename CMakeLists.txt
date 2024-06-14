@@ -8,10 +8,26 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(SL_UNIT_TESTS "Build the unit tests" OFF)
 option(SL_BUILD_LIB "Build the simple-lua library" ON)
 if (SL_BUILD_LIB)
-    set(SL_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
     set(LUA_ENABLE_TESTING OFF CACHE BOOL "disable testing in lua")
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/extern/lua)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+    ## LUA
+    set(LUA_SOURCES
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Lua/TypeMap.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Lua/Lib.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Lua/Runtime.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Lua/Table.cpp)
+    
+    add_library(simple-lua SHARED ${LUA_SOURCES})
+    
+    target_compile_definitions(simple-lua PRIVATE SL_BUILD)
+    target_link_libraries(simple-lua PRIVATE lua_static)
+    target_include_directories(simple-lua 
+        PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}/include 
+        PRIVATE
+            ${LUA_INCLUDE_DIR}
+    )
 
     if (SL_UNIT_TESTS)
         include(FetchContent)
@@ -26,12 +42,12 @@ if (SL_BUILD_LIB)
 
         enable_testing()
 
-        add_executable(hello_test ${SL_SOURCE_DIR}/tests/hello_test.cpp)
+        add_executable(hello_test ${CMAKE_CURRENT_SOURCE_DIR}/tests/hello_test.cpp)
         target_link_libraries(hello_test PRIVATE simple-lua GTest::gtest_main)
 
-        add_executable(lua_file ${SL_SOURCE_DIR}/tests/lua_file.cpp)
+        add_executable(lua_file ${CMAKE_CURRENT_SOURCE_DIR}/tests/lua_file.cpp)
         target_link_libraries(lua_file PRIVATE simple-lua GTest::gtest_main)
-        target_compile_definitions(lua_file PRIVATE LUA_FILE_DIR="${SL_SOURCE_DIR}/tests/lua-files")
+        target_compile_definitions(lua_file PRIVATE LUA_FILE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/lua-files")
 
         include(GoogleTest)
         gtest_discover_tests(hello_test)
@@ -43,6 +59,18 @@ option(SL_BUILD_DOCS "Build the documentation" OFF)
 if (SL_BUILD_DOCS)
     find_package(Doxygen)
     if (DOXYGEN_FOUND)
+        include(ExternalProject)
+        ExternalProject_Add(doxygenawesome
+            GIT_REPOSITORY https://github.com/jothepro/doxygen-awesome-css.git
+            DOWNLOAD_EXTRACT_TIMESTAMP ON
+            SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/doxygen-awesome"
+            DOWNLOAD_DIR "${CMAKE_CURRENT_BINARY_DIR}/doxygen-awesome"
+            BUILD_COMMAND ""
+            INSTALL_COMMAND ""
+            CONFIGURE_COMMAND ""
+            GIT_TAG origin/main
+        )
+
         # set input and output files
         set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
         set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
