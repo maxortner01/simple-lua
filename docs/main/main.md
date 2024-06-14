@@ -18,6 +18,12 @@ You can expose your project to the library with
 target_link_directories(PROJECT_NAME PRIVATE simple-lua)
 ~~~~~~
 
+### CMake Options
+There are three important options:
+ 1) `-DSL_BUILD_LIB=ON` is on by default, but you can choose not to build the library (for example if you only want documentation)
+ 2) `-DSL_UNIT_TESTS=ON` will build the unit tests (requires the library), which includes pulling the [googletest](https://github.com/google/googletest) repository, run `ctest` to actually run the tests
+ 3) `-DSL_BUILD_DOCS=ON` will build the documentation, which includes pulling [doxygen-awesome](https://github.com/jothepro/doxygen-awesome-css) which is used for basic formatting
+
 ## Basic Usage
 To learn the Lua scripting language, [check out this page](https://www.lua.org/start.html). Once you have a script you're ready to integrate into your C++ program (and have set up the subdirectory with cmake), all you need to do is include `#include <SL/Lua.hpp>` at the top of your file. 
 
