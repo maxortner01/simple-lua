@@ -5,6 +5,7 @@ project(main)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(SL_CODE_COVERAGE "Build kcov to measure testing coverage" OFF)
 option(SL_UNIT_TESTS "Build the unit tests" OFF)
 option(SL_BUILD_LIB "Build the simple-lua library" ON)
 if (SL_BUILD_LIB)
@@ -52,6 +53,35 @@ if (SL_BUILD_LIB)
         include(GoogleTest)
         gtest_discover_tests(hello_test)
         gtest_discover_tests(lua_file)
+        
+        # For code coverage
+        if (SL_CODE_COVERAGE)
+            include(ExternalProject)
+            ExternalProject_Add(kcov
+                GIT_REPOSITORY https://github.com/SimonKagstrom/kcov.git
+                DOWNLOAD_EXTRACT_TIMESTAMP ON
+                SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/kcov"
+                DOWNLOAD_DIR "${CMAKE_CURRENT_BINARY_DIR}/kcov"
+                BUILD_COMMAND "make"
+                INSTALL_COMMAND ""
+                GIT_TAG origin/master
+            )
+
+            add_custom_command(TARGET kcov POST_BUILD
+                DEPENDS hello_test
+                COMMAND ${CMAKE_CURRENT_BINARY_DIR}/kcov-prefix/src/kcov-build/src/kcov --include-path=../include ${CMAKE_CURRENT_BINARY_DIR}/cov_hello_test ${CMAKE_CURRENT_BINARY_DIR}/hello_test && echo "Hello" >> t1.txt
+            )
+
+            add_custom_command(TARGET kcov POST_BUILD
+                DEPENDS lua_file
+                COMMAND ${CMAKE_CURRENT_BINARY_DIR}/kcov-prefix/src/kcov-build/src/kcov --include-path=../include ${CMAKE_CURRENT_BINARY_DIR}/cov_lua_file ${CMAKE_CURRENT_BINARY_DIR}/lua_file && echo "Hello" >> t2.txt
+            )
+
+            add_custom_command(TARGET kcov
+                DEPENDS t1.txt t2.txt
+                COMMAND ${CMAKE_CURRENT_BINARY_DIR}/kcov-prefix/src/kcov-build/src/kcov --merge ${CMAKE_CURRENT_BINARY_DIR}/coverage ${CMAKE_CURRENT_BINARY_DIR}/cov_* && echo "Hello" >> t3.txt
+            )
+        endif()
     endif()
 endif()
 
@@ -85,6 +115,15 @@ if (SL_BUILD_DOCS)
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen"
             VERBATIM )
+
+        if (SL_CODE_COVERAGE)
+            add_custom_command(TARGET kcov
+                DEPENDS t3.txt doc_doxygen
+                COMMAND rsync -av ${CMAKE_CURRENT_BINARY_DIR}/coverage/. ${CMAKE_CURRENT_BINARY_DIR}/docs/html --exclude=index.html && 
+                    cp ${CMAKE_CURRENT_BINARY_DIR}/coverage/index.html ${CMAKE_CURRENT_BINARY_DIR}/docs/html/coverage.html &&
+                    python3 ${CMAKE_SOURCE_DIR}/docs/get_url.py ${CMAKE_CURRENT_BINARY_DIR}/docs/html # now we need to create the forward to the correct badge
+            )
+        endif()
     else (DOXYGEN_FOUND)
     message("Doxygen need to be installed to generate the doxygen documentation")
     endif (DOXYGEN_FOUND)
