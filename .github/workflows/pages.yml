@@ -35,7 +35,7 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Run a one-line script
-      run: cmake -B ${{ steps.strings.outputs.build-output-dir }} -DSL_BUILD_LIB=OFF -DSL_BUILD_DOCS=ON -S ${{ github.workspace }}
+      run: cmake -B ${{ steps.strings.outputs.build-output-dir }} -DSL_BUILD_LIB=OFF -DSL_CODE_COVERAGE=ON -DSL_BUILD_DOCS=ON -S ${{ github.workspace }}
      
     - name: Build docs
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
