@@ -36,10 +36,17 @@ jobs:
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
     # Runs a single command using the runners shell
-    - name: Run a one-line script
-      run: cmake -B ${{ steps.strings.outputs.build-output-dir }} -DSL_BUILD_LIB=ON -DSL_CODE_COVERAGE=ON -DSL_BUILD_DOCS=ON -S ${{ github.workspace }}
+    - name: Configure docs
+      run: cmake -B ${{ steps.strings.outputs.build-output-dir }} -DSL_BUILD_LIB=OFF -DSL_BUILD_DOCS=ON -S ${{ github.workspace }}
      
     - name: Build docs
+      # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
+      run: cmake --build ${{ steps.strings.outputs.build-output-dir }}
+
+    - name: Configure coverage
+      run: cmake -B ${{ steps.strings.outputs.build-output-dir }} -DCMAKE_BUILD_TYPE=Debug -DSL_BUILD_LIB=ON -DSL_UNIT_TESTS=ON -DSL_CODE_COVERAGE=ON -DSL_BUILD_DOCS=OFF -S ${{ github.workspace }}
+
+    - name: Run coverage
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }}
 
