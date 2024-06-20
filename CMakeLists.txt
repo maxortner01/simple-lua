@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 
 project(main)
 
+include(ExternalProject)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -56,7 +58,7 @@ if (SL_BUILD_LIB)
         
         # For code coverage
         if (SL_CODE_COVERAGE)
-            include(ExternalProject)
+            message("Including code coverage")
             ExternalProject_Add(kcov
                 GIT_REPOSITORY https://github.com/SimonKagstrom/kcov.git
                 DOWNLOAD_EXTRACT_TIMESTAMP ON
@@ -89,7 +91,6 @@ option(SL_BUILD_DOCS "Build the documentation" OFF)
 if (SL_BUILD_DOCS)
     find_package(Doxygen)
     if (DOXYGEN_FOUND)
-        include(ExternalProject)
         ExternalProject_Add(doxygenawesome
             GIT_REPOSITORY https://github.com/jothepro/doxygen-awesome-css.git
             DOWNLOAD_EXTRACT_TIMESTAMP ON
@@ -115,16 +116,16 @@ if (SL_BUILD_DOCS)
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen"
             VERBATIM )
-
-        if (SL_CODE_COVERAGE)
-            add_custom_command(TARGET kcov
-                DEPENDS t3.txt doc_doxygen
-                COMMAND rsync -av ${CMAKE_CURRENT_BINARY_DIR}/coverage/. ${CMAKE_CURRENT_BINARY_DIR}/docs/html --exclude=index.html && 
-                    cp ${CMAKE_CURRENT_BINARY_DIR}/coverage/index.html ${CMAKE_CURRENT_BINARY_DIR}/docs/html/coverage.html &&
-                    python3 ${CMAKE_SOURCE_DIR}/docs/get_url.py ${CMAKE_CURRENT_BINARY_DIR}/docs/html # now we need to create the forward to the correct badge
-            )
-        endif()
     else (DOXYGEN_FOUND)
-    message("Doxygen need to be installed to generate the doxygen documentation")
+        message(FATAL_ERROR "Doxygen need to be installed to generate the doxygen documentation")
     endif (DOXYGEN_FOUND)
+endif()
+
+if (SL_CODE_COVERAGE AND SL_BUILD_DOCS)
+    add_custom_command(TARGET kcov
+        DEPENDS t3.txt doc_doxygen
+        COMMAND rsync -av ${CMAKE_CURRENT_BINARY_DIR}/coverage/. ${CMAKE_CURRENT_BINARY_DIR}/docs/html --exclude=index.html && 
+            cp ${CMAKE_CURRENT_BINARY_DIR}/coverage/index.html ${CMAKE_CURRENT_BINARY_DIR}/docs/html/coverage.html &&
+            python3 ${CMAKE_SOURCE_DIR}/docs/get_url.py ${CMAKE_CURRENT_BINARY_DIR}/docs/html # now we need to create the forward to the correct badge
+    )
 endif()
