@@ -51,13 +51,12 @@ jobs:
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }}
 
     - name: Run kcov
-      run: codesign -s - --entitlements ${{ steps.strings.outputs.build-output-dir }}/kcov/src/osx-entitlements.xml -f .${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov &&
-           ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --include-path=../include ${{ steps.strings.outputs.build-output-dir }}/cov_hello_test ${{ steps.strings.outputs.build-output-dir }}/hello_test &&
-           ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --include-path=../include ${{ steps.strings.outputs.build-output-dir }}/cov_lua_file   ${{ steps.strings.outputs.build-output-dir }}/lua_file   &&
-           ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --merge ${{ steps.strings.outputs.build-output-dir }}/coverage ${{ steps.strings.outputs.build-output-dir }}/cov_* &&
-           rsync -av ${{ steps.strings.outputs.build-output-dir }}/coverage/. ${{ steps.strings.outputs.build-output-dir }}/docs/html --exclude=index.html && 
-           cp ${{ steps.strings.outputs.build-output-dir }}/coverage/index.html ${{ steps.strings.outputs.build-output-dir }}/docs/html/coverage.html &&
-           python3 ${{ github.workspace }}/docs/get_url.py ${{ steps.strings.outputs.build-output-dir }}/docs/html
+      run: sudo ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --include-path=../include ${{ steps.strings.outputs.build-output-dir }}/cov_hello_test ${{ steps.strings.outputs.build-output-dir }}/hello_test &&
+           sudo ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --include-path=../include ${{ steps.strings.outputs.build-output-dir }}/cov_lua_file   ${{ steps.strings.outputs.build-output-dir }}/lua_file   &&
+           sudo ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --merge ${{ steps.strings.outputs.build-output-dir }}/coverage ${{ steps.strings.outputs.build-output-dir }}/cov_* &&
+           sudo rsync -av ${{ steps.strings.outputs.build-output-dir }}/coverage/. ${{ steps.strings.outputs.build-output-dir }}/docs/html --exclude=index.html && 
+           sudo cp ${{ steps.strings.outputs.build-output-dir }}/coverage/index.html ${{ steps.strings.outputs.build-output-dir }}/docs/html/coverage.html &&
+           sudo python3 ${{ github.workspace }}/docs/get_url.py ${{ steps.strings.outputs.build-output-dir }}/docs/html
 
     - name: Create GitHub Pages artifact
       uses: actions/upload-pages-artifact@v3.0.1
