@@ -83,6 +83,13 @@ if (SL_BUILD_LIB)
                 DEPENDS t1.txt t2.txt
                 COMMAND ${CMAKE_CURRENT_BINARY_DIR}/kcov-prefix/src/kcov-build/src/kcov --merge ${CMAKE_CURRENT_BINARY_DIR}/coverage ${CMAKE_CURRENT_BINARY_DIR}/cov_* && echo "Hello" >> t3.txt
             )
+            
+            add_custom_command(TARGET kcov
+                DEPENDS t3.txt
+                COMMAND rsync -av ${CMAKE_CURRENT_BINARY_DIR}/coverage/. ${CMAKE_CURRENT_BINARY_DIR}/docs/html --exclude=index.html && 
+                    cp ${CMAKE_CURRENT_BINARY_DIR}/coverage/index.html ${CMAKE_CURRENT_BINARY_DIR}/docs/html/coverage.html &&
+                    python3 ${CMAKE_SOURCE_DIR}/docs/get_url.py ${CMAKE_CURRENT_BINARY_DIR}/docs/html # now we need to create the forward to the correct badge
+            )
         endif()
     endif()
 endif()
