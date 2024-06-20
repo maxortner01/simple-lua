@@ -68,28 +68,6 @@ if (SL_BUILD_LIB)
                 INSTALL_COMMAND ""
                 GIT_TAG origin/master
             )
-
-            add_custom_command(TARGET kcov POST_BUILD
-                DEPENDS hello_test
-                COMMAND ${CMAKE_CURRENT_BINARY_DIR}/kcov-prefix/src/kcov-build/src/kcov --include-path=../include ${CMAKE_CURRENT_BINARY_DIR}/cov_hello_test ${CMAKE_CURRENT_BINARY_DIR}/hello_test && echo "Hello" >> t1.txt
-            )
-
-            add_custom_command(TARGET kcov POST_BUILD
-                DEPENDS lua_file
-                COMMAND ${CMAKE_CURRENT_BINARY_DIR}/kcov-prefix/src/kcov-build/src/kcov --include-path=../include ${CMAKE_CURRENT_BINARY_DIR}/cov_lua_file ${CMAKE_CURRENT_BINARY_DIR}/lua_file && echo "Hello" >> t2.txt
-            )
-
-            add_custom_command(TARGET kcov
-                DEPENDS t1.txt t2.txt
-                COMMAND ${CMAKE_CURRENT_BINARY_DIR}/kcov-prefix/src/kcov-build/src/kcov --merge ${CMAKE_CURRENT_BINARY_DIR}/coverage ${CMAKE_CURRENT_BINARY_DIR}/cov_* && echo "Hello" >> t3.txt
-            )
-            
-            add_custom_command(TARGET kcov
-                DEPENDS t3.txt
-                COMMAND #rsync -av ${CMAKE_CURRENT_BINARY_DIR}/coverage/. ${CMAKE_CURRENT_BINARY_DIR}/docs/html --exclude=index.html && 
-                    #cp ${CMAKE_CURRENT_BINARY_DIR}/coverage/index.html ${CMAKE_CURRENT_BINARY_DIR}/docs/html/coverage.html &&
-                    python3 ${CMAKE_SOURCE_DIR}/docs/get_url.py ${CMAKE_CURRENT_BINARY_DIR}/docs/html # now we need to create the forward to the correct badge
-            )
         endif()
     endif()
 endif()
