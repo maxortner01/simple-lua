@@ -35,6 +35,11 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
+    - name: "Python env"
+      run: python3 -m venv ${{ steps.strings.outputs.build-output-dir }}/env && 
+           source ${{ steps.strings.outputs.build-output-dir }}/env/bin/activate && 
+           python3 -m pip install requests Wand
+
     # Runs a single command using the runners shell
     - name: Configure docs
       run: cmake -B ${{ steps.strings.outputs.build-output-dir }} -DSL_BUILD_LIB=OFF -DSL_BUILD_DOCS=ON -S ${{ github.workspace }}
@@ -51,12 +56,15 @@ jobs:
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }}
 
     - name: Run kcov
-      run: sudo ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --include-path=../include ${{ steps.strings.outputs.build-output-dir }}/cov_hello_test ${{ steps.strings.outputs.build-output-dir }}/hello_test &&
-           sudo ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --include-path=../include ${{ steps.strings.outputs.build-output-dir }}/cov_lua_file   ${{ steps.strings.outputs.build-output-dir }}/lua_file   &&
-           sudo ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --merge ${{ steps.strings.outputs.build-output-dir }}/coverage ${{ steps.strings.outputs.build-output-dir }}/cov_* &&
-           sudo rsync -av ${{ steps.strings.outputs.build-output-dir }}/coverage/. ${{ steps.strings.outputs.build-output-dir }}/docs/html --exclude=index.html && 
-           sudo cp ${{ steps.strings.outputs.build-output-dir }}/coverage/index.html ${{ steps.strings.outputs.build-output-dir }}/docs/html/coverage.html &&
-           sudo python3 ${{ github.workspace }}/docs/get_url.py ${{ steps.strings.outputs.build-output-dir }}/docs/html
+      run: sudo ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --include-path=${{ github.workspace }}/include ${{ steps.strings.outputs.build-output-dir }}/cov_hello_test ${{ steps.strings.outputs.build-output-dir }}/hello_test &&
+           sudo ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --include-path=${{ github.workspace }}/include ${{ steps.strings.outputs.build-output-dir }}/cov_lua_file   ${{ steps.strings.outputs.build-output-dir }}/lua_file   &&
+           sudo ${{ steps.strings.outputs.build-output-dir }}/kcov-prefix/src/kcov-build/src/kcov --merge ${{ steps.strings.outputs.build-output-dir }}/coverage ${{ steps.strings.outputs.build-output-dir }}/cov_*
+
+    - name: Run codacy-coverage-reporter
+      uses: codacy/codacy-coverage-reporter-action@v1.3.0
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        coverage-reports: ${{ steps.strings.outputs.build-output-dir }}/coverage/kcov-merged/cobertura.xml
 
     - name: Create GitHub Pages artifact
       uses: actions/upload-pages-artifact@v3.0.1
